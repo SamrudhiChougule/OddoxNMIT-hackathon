@@ -1,6 +1,6 @@
 # OddoxNMIT-hackathon
 ps-
-# EcoFind- Sustainable Secon Hand Market
+# EcoFind- Sustainable Second Hand Market
 
 **EcoFind** is a sustainable second-hand marketplace that empowers users to buy, sell, and rescue items, reducing environmental impact while promoting circular economy practices.  
 
