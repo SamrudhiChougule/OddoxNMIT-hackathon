@@ -1,0 +1,272 @@
+/* ================= Body & Font ================= */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(-45deg, #0d0d0d, #1a1a1a, #00e676, #004d00);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #90fbf9;
+}
+
+
+/* ================= Header ================= */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #222;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header .logo {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #00e676;
+    /* neon green accent */
+}
+
+header nav a {
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: #aaa;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: #00e676;
+}
+
+#theme-toggle {
+    background: none;
+    border: 1px solid #00e676;
+    border-radius: 50%;
+    color: #00e676;
+    font-size: 1.2rem;
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#theme-toggle:hover {
+    background: #00e676;
+    color: #000;
+    transform: scale(1.2);
+}
+
+
+/* ================= Hero Section ================= */
+
+.hero {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/1200/400?blur') center/cover no-repeat;
+    color: #fff;
+    border-bottom: 2px solid #00e676;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-btn {
+    background: linear-gradient(90deg, #00e676, #00ffa3);
+    color: #000;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #00e67680;
+    transition: all 0.3s;
+}
+
+.cta-btn:hover {
+    box-shadow: 0 0 25px #00e676;
+    transform: scale(1.05);
+}
+
+
+/* ================= Filters ================= */
+
+.filters {
+    text-align: center;
+    padding: 1rem;
+}
+
+.filter-btn {
+    background: #222;
+    color: #00e676;
+    border: 1px solid #00e676;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover {
+    background: #00e676;
+    color: #000;
+}
+
+
+/* ================= Product Grid ================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.product-card {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+    border: 2px solid transparent;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s forwards;
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+    border: 2px solid #00e676;
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+}
+
+.product-card h3 {
+    color: #fff;
+    margin: 0.5rem 0;
+}
+
+.product-card p {
+    color: #bbb;
+    font-size: 0.9rem;
+}
+
+.product-card b {
+    color: #00e676;
+    font-size: 1.1rem;
+}
+
+
+/* ================= Wishlist Button ================= */
+
+.product-card button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #111;
+    border: 1px solid #00e676;
+    color: #00e676;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.product-card button:hover {
+    background: #00e676;
+    color: #000;
+    transform: scale(1.2);
+}
+
+
+/* ================= Wishlist Section ================= */
+
+.wishlist {
+    padding: 2rem;
+    background: #111;
+}
+
+
+/* ================= Eco Badge ================= */
+
+.eco-badge {
+    display: inline-block;
+    background: #00c853;
+    color: black;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+}
+
+
+/* ================= Fade-in Animation ================= */
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ================= Footer ================= */
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: #111;
+    color: #777;
+    border-top: 1px solid #222;
+}
+
+
+/* ================= Light Mode ================= */
+
+body.light-mode {
+    background: #f9f9f9;
+    color: #111;
+}
+
+body.light-mode header,
+body.light-mode footer {
+    background: #eee;
+    color: #111;
+}
+
+body.light-mode .product-card {
+    background: rgb(238, 244, 241);
+    color: #000;
+}
+
+
+/* ================= Animated Gradient ================= */
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFind - Sustainable Second-Hand Marketplace</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .scale-in {
+            animation: scaleIn 0.2s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #22c55e 0%, #0ea5e9 100%);
+        }
+        
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card {
+            transition: all 0.2s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .deal-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .discount-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #22c55e;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .hero-pattern {
+            background-color: #0ea5e9;
+            background-image: radial-gradient(at 81% 7%, #22c55e 0, transparent 50%), radial-gradient(at 22% 92%, #0ea5e9 0, transparent 50%);
+        }
+        
+        .carousel {
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            /* Firefox */
+        }
+        
+        .carousel::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Edge */
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+    <div id="app">
+        <!-- App will be rendered here -->
+    </div>
+
+    <script>
+        // Constants and Utilities
+        const CATEGORIES = ["Clothing", "Electronics", "Furniture", "Books", "Home & Garden", "Sports", "Toys", "Other"];
+
+        const SAMPLE_LISTINGS = [{
+            id: "L1001",
+            title: "Denim Jacket – like new",
+            category: "Clothing",
+            price: 899,
+            originalPrice: 1299,
+            barter: false,
+            condition: "Excellent",
+            location: "Pune",
+            distanceKm: 5,
+            ecoScore: 84,
+            co2SavedKg: 8.2,
+            waterSavedL: 3500,
+            seller: {
+                id: "U01",
+                name: "Maya",
+                verified: true,
+                rating: 4.8
+            },
+            images: [],
+            description: "Classic unisex denim jacket. Worn twice. Size M.",
+            createdAt: Date.now() - 1000 * 60 * 60 * 18,
+            featured: true
+        }, {
+            id: "L1002",
+            title: "Lenovo ThinkPad T480",
+            category: "Electronics",
+            price: 21500,
+            originalPrice: 28999,
+            barter: true,
+            condition: "Good",
+            location: "Mumbai",
+            distanceKm: 12,
+            ecoScore: 91,
+            co2SavedKg: 120,
+            waterSavedL: 0,
+            seller: {
+                id: "U02",
+                name: "Arun",
+                verified: false,
+                rating: 4.4
+            },
+            images: [],
+            description: "8GB RAM, 256GB SSD. Battery health ~75%. Includes charger.",
+            createdAt: Date.now() - 1000 * 60 * 60 * 48,
+            featured: true
+        }, {
+            id: "L1003",
+            title: "Solid Wood Study Table",
+            category: "Furniture",
+            price: 4500,
+            barter: false,
+            condition: "Very Good",
+            location: "Bengaluru",
+            distanceKm: 2,
+            ecoScore: 77,
+            co2SavedKg: 35,
+            waterSavedL: 600,
+            seller: {
+                id: "U03",
+                name: "Fatima",
+                verified: true,
+                rating: 4.9
+            },
+            images: [],
+            description: "Minimalist desk 120x60cm. Minor scratches.",
+            createdAt: Date.now() - 1000 * 60 * 60 * 6,
+            featured: true
+        }, {
+            id: "L1004",
+            title: "Set of 6 Fiction Books",
+            category: "Books",
+            price: 1200,
+            originalPrice: 1999,
+            barter: true,
+            condition: "Like New",
+            location: "Delhi",
+            distanceKm: 18,
+            ecoScore: 70,
+            co2SavedKg: 6,
+            waterSavedL: 200,
+            seller: {
+                id: "U04",
+                name: "Ravi",
+                verified: false,
+                rating: 4.1
+            },
+            images: [],
+            description: "Mixed authors, contemporary fiction. Prefer exchange for non‑fiction.",
+            createdAt: Date.now() - 1000 * 60 * 60 * 96,
+            featured: false
+        }, {
+            id: "L1005",
+            title: "Yoga Mat Premium",
+            category: "Sports",
+            price: 800,
+            originalPrice: 1500,
+            barter: false,
+            condition: "Excellent",
+            location: "Chennai",
+            distanceKm: 8,
+            ecoScore: 82,
+            co2SavedKg: 5.5,
+            waterSavedL: 1200,
+            seller: {
+                id: "U05",
+                name: "Priya",
+                verified: true,
+                rating: 4.7
+            },
+            images: [],
+            description: "Eco-friendly yoga mat, used only a few times. Non-slip surface.",
+            createdAt: Date.now() - 1000 * 60 * 60 * 24,
+            featured: true
+        }, {
+            id: "L1006",
+            title: "Vintage Wall Clock",
+            category: "Home & Garden",
+            price: 1500,
+            barter: true,
+            condition: "Good",
+            location: "Kolkata",
+            distanceKm: 25,
+            ecoScore: 88,
+            co2SavedKg: 12,
+            waterSavedL: 800,
+            seller: {
+                id: "U06",
+                name: "Amit",
+                verified: false,
+                rating: 4.3
+            },
+            images: [],
+            description: "Beautiful vintage wall clock. Working condition. Adds charm to any room.",
+            createdAt: Date.now() - 1000 * 60 * 60 * 72,
+            featured: false
+        }, ];
+
+        // Utility functions
+        function uid(prefix = "ID") {
+            return `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
+        }
+
+        function readLocal(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function writeLocal(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.error("Error writing to localStorage", e);
+            }
+        }
+
+        // State management
+        let state = {
+            user: readLocal("ecofind_user", null),
+            listings: readLocal("ecofind_listings", SAMPLE_LISTINGS),
+            currentView: "home",
+            modalListing: null,
+            filters: {
+                query: "",
+                category: "All",
+                barterOnly: false,
+                sortBy: "Newest",
+                maxDistance: 50
+            },
+            cart: readLocal("ecofind_cart", []),
+            wishlist: readLocal("ecofind_wishlist", [])
+        };
+
+        // Update state and re-render
+        function setState(newState) {
+            state = {...state,
+                ...newState
+            };
+            if (newState.user !== undefined) {
+                writeLocal("ecofind_user", state.user);
+            }
+            if (newState.listings !== undefined) {
+                writeLocal("ecofind_listings", state.listings);
+            }
+            if (newState.cart !== undefined) {
+                writeLocal("ecofind_cart", state.cart);
+            }
+            if (newState.wishlist !== undefined) {
+                writeLocal("ecofind_wishlist", state.wishlist);
+            }
+            render();
+        }
+
+        // Navigation
+        function navigateTo(view) {
+            setState({
+                currentView: view
+            });
+        }
+
+        // Auth functions
+        function login(name = "Guest") {
+            const user = {
+                id: uid("U"),
+                name,
+                verified: false,
+                rating: 4.5,
+                ecoPoints: 0
+            };
+            setState({
+                user
+            });
+        }
+
+        function logout() {
+            setState({
+                user: null
+            });
+        }
+
+        // Cart functions
+        function addToCart(listingId) {
+            if (!state.cart.includes(listingId)) {
+                const cart = [...state.cart, listingId];
+                setState({
+                    cart
+                });
+            }
+        }
+
+        function removeFromCart(listingId) {
+            const cart = state.cart.filter(id => id !== listingId);
+            setState({
+                cart
+            });
+        }
+
+        // Wishlist functions
+        function toggleWishlist(listingId) {
+            let wishlist;
+            if (state.wishlist.includes(listingId)) {
+                wishlist = state.wishlist.filter(id => id !== listingId);
+            } else {
+                wishlist = [...state.wishlist, listingId];
+            }
+            setState({
+                wishlist
+            });
+        }
+
+        // Listing functions
+        function addListing(listing) {
+            const newListing = {
+                ...listing,
+                id: uid("L"),
+                createdAt: Date.now()
+            };
+            const listings = [newListing, ...state.listings];
+            setState({
+                listings
+            });
+        }
+
+        function updateListing(id, patch) {
+            const listings = state.listings.map(listing =>
+                listing.id === id ? {...listing,
+                    ...patch
+                } : listing
+            );
+            setState({
+                listings
+            });
+        }
+
+        // Impact estimation
+        function estimateImpact({
+            category,
+            condition = "Good",
+            weightKg = 1,
+            price = 0
+        }) {
+            const baseByCategory = {
+                Clothing: {
+                    co2PerKg: 15,
+                    waterPerKg: 7000
+                },
+                Electronics: {
+                    co2PerKg: 70,
+                    waterPerKg: 500
+                },
+                Furniture: {
+                    co2PerKg: 20,
+                    waterPerKg: 1000
+                },
+                Books: {
+                    co2PerKg: 6,
+                    waterPerKg: 300
+                },
+                "Home & Garden": {
+                    co2PerKg: 12,
+                    waterPerKg: 800
+                },
+                Sports: {
+                    co2PerKg: 18,
+                    waterPerKg: 1200
+                },
+                Toys: {
+                    co2PerKg: 8,
+                    waterPerKg: 400
+                },
+                Other: {
+                    co2PerKg: 10,
+                    waterPerKg: 500
+                },
+            };
+
+            const condFactor = {
+                "New": 0.6,
+                "Like New": 0.8,
+                "Excellent": 0.85,
+                "Very Good": 0.9,
+                "Good": 1.0,
+                "Fair": 1.1
+            };
+
+            const base = baseByCategory[category] || baseByCategory.Other;
+            const cf = condFactor[condition] || 1.0;
+            const co2SavedKg = +(base.co2PerKg * weightKg * cf).toFixed(1);
+            const waterSavedL = Math.round(base.waterPerKg * weightKg * cf);
+
+            let ecoScore = 50;
+            ecoScore += Math.min(30, co2SavedKg / 4);
+            ecoScore += Math.min(15, waterSavedL / 800);
+            ecoScore += price <= 0 ? 5 : 0;
+            ecoScore = Math.max(1, Math.min(100, Math.round(ecoScore)));
+
+            return {
+                co2SavedKg,
+                waterSavedL,
+                ecoScore
+            };
+        }
+
+        // Filter and sort listings
+        function getFilteredListings() {
+            let res = [...state.listings];
+
+            if (state.filters.query) {
+                res = res.filter(l =>
+                    l.title.toLowerCase().includes(state.filters.query.toLowerCase())
+                );
+            }
+
+            if (state.filters.category !== "All") {
+                res = res.filter(l => l.category === state.filters.category);
+            }
+
+            if (state.filters.barterOnly) {
+                res = res.filter(l => l.barter);
+            }
+
+            res = res.filter(l => l.distanceKm <= state.filters.maxDistance);
+
+            switch (state.filters.sortBy) {
+                case "Price ↑":
+                    res.sort((a, b) => a.price - b.price);
+                    break;
+                case "Price ↓":
+                    res.sort((a, b) => b.price - a.price);
+                    break;
+                case "EcoScore":
+                    res.sort((a, b) => b.ecoScore - a.ecoScore);
+                    break;
+                default:
+                    res.sort((a, b) => b.createdAt - a.createdAt);
+            }
+
+            return res;
+        }
+
+        // Get featured listings
+        function getFeaturedListings() {
+            return state.listings.filter(l => l.featured);
+        }
+
+        // UI Components
+        function EcoBadge(score) {
+            const hue = Math.round((score / 100) * 120);
+            return `
+                <span class="text-xs px-2 py-1 rounded-full font-semibold" 
+                      style="background-color: hsl(${hue} 80% 90%); color: hsl(${hue} 60% 25%)">
+                    Eco ${score}
+                </span>
+            `;
+        }
+
+        function NavLink(text, view, isActive) {
+            return `
+                <a href="#" onclick="navigateTo('${view}')" 
+                   class="px-3 py-1.5 rounded-full hover:bg-emerald-50 ${isActive ? 'bg-emerald-100 text-emerald-900 font-medium' : 'text-slate-700'}">
+                    ${text}
+                </a>
+            `;
+        }
+
+        function Header() {
+            const isBrowseActive = state.currentView === 'browse';
+            const isSellActive = state.currentView === 'sell';
+            const isImpactActive = state.currentView === 'impact';
+
+            return `
+                <header class="sticky top-0 z-50 backdrop-blur bg-white/90 border-b border-slate-200 shadow-sm">
+                    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+                        <a href="#" onclick="navigateTo('home')" class="flex items-center gap-2 font-bold text-emerald-600 text-lg">
+                            <i data-lucide="recycle" class="w-6 h-6"></i> EcoFind
+                        </a>
+                        <nav class="ml-6 flex items-center gap-2 text-sm">
+                            ${NavLink('Home', 'home', state.currentView === 'home')}
+                            ${NavLink('Browse', 'browse', isBrowseActive)}
+                            ${NavLink('Sell', 'sell', isSellActive)}
+                            ${NavLink('Impact', 'impact', isImpactActive)}
+                            ${NavLink('Categories', 'categories', state.currentView === 'categories')}
+                        </nav>
+                        <div class="ml-auto flex items-center gap-4">
+                            <a href="#" onclick="navigateTo('browse')" class="hidden md:flex items-center gap-2 bg-white border rounded-full px-4 py-2 text-sm shadow-sm border-slate-200 hover:border-emerald-300 transition-colors">
+                                <i data-lucide="search" class="w-4 h-4 text-slate-500"></i> 
+                                <span class="text-slate-600">Search items…</span>
+                            </a>
+                            <a href="#" onclick="navigateTo('wishlist')" class="p-2 rounded-full hover:bg-slate-100 relative">
+                                <i data-lucide="heart" class="w-5 h-5 ${state.wishlist.length > 0 ? 'text-rose-500' : 'text-slate-600'}"></i>
+                                ${state.wishlist.length > 0 ? `<span class="absolute -top-1 -right-1 bg-rose-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">${state.wishlist.length}</span>` : ''}
+                            </a>
+                            <a href="#" onclick="navigateTo('cart')" class="p-2 rounded-full hover:bg-slate-100 relative">
+                                <i data-lucide="shopping-cart" class="w-5 h-5 ${state.cart.length > 0 ? 'text-emerald-600' : 'text-slate-600'}"></i>
+                                ${state.cart.length > 0 ? `<span class="absolute -top-1 -right-1 bg-emerald-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">${state.cart.length}</span>` : ''}
+                            </a>
+                            ${state.user ? `
+                                <div class="flex items-center gap-2">
+                                    <a href="#" onclick="navigateTo('profile')" class="hidden sm:flex items-center gap-2 gradient-bg text-white rounded-full px-4 py-2 text-sm shadow-md">
+                                        <i data-lucide="user" class="w-4 h-4"></i> ${state.user.name}
+                                    </a>
+                                    <button onclick="logout()" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 text-sm p-2 hover:bg-slate-100 rounded-full">
+                                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            ` : `
+                                <a href="#" onclick="navigateTo('login')" class="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-full px-4 py-2">
+                                    <i data-lucide="log-in" class="w-4 h-4"></i> Login
+                                </a>
+                            `}
+                        </div>
+                    </div>
+                </header>
+            `;
+        }
+
+        function Footer() {
+            return `
+                <footer class="border-t mt-20 bg-white py-10">
+                    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div>
+                            <div class="flex items-center gap-2 font-bold text-emerald-600 text-lg mb-4">
+                                <i data-lucide="recycle" class="w-6 h-6"></i> EcoFind
+                            </div>
+                            <p class="text-slate-600 text-sm">Making sustainable shopping accessible to everyone. Join us in reducing waste and saving the planet.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-800 mb-4">Quick Links</h3>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><a href="#" onclick="navigateTo('home')" class="hover:text-emerald-600">Home</a></li>
+                                <li><a href="#" onclick="navigateTo('browse')" class="hover:text-emerald-600">Browse</a></li>
+                                <li><a href="#" onclick="navigateTo('sell')" class="hover:text-emerald-600">Sell Items</a></li>
+                                <li><a href="#" onclick="navigateTo('impact')" class="hover:text-emerald-600">Impact</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-800 mb-4">Help & Support</h3>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><a href="#" class="hover:text-emerald-600">FAQ</a></li>
+                                <li><a href="#" class="hover:text-emerald-600">Shipping & Returns</a></li>
+                                <li><a href="#" class="hover:text-emerald-600">Privacy Policy</a></li>
+                                <li><a href="#" class="hover:text-emerald-600">Terms of Service</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-800 mb-4">Newsletter</h3>
+                            <p class="text-slate-600 text-sm mb-3">Subscribe for eco-friendly tips and exclusive deals</p>
+                            <div class="flex gap-2">
+                                <input type="email" placeholder="Your email" class="border border-slate-200 rounded-lg px-3 py-2 text-sm w-full">
+                                <button class="bg-emerald-600 text-white rounded-lg px-3 py-2 text-sm whitespace-nowrap">Subscribe</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="max-w-7xl mx-auto px-4 border-t mt-8 pt-8 text-center text-sm text-slate-500">
+                        Built with ♻️ by EcoFind • Make reuse the default • © 2023 EcoFind
+                    </div>
+                </footer>
+            `;
+        }
+
+        function HomeView() {
+            const featuredListings = getFeaturedListings();
+            
+            return `
+                <div class="space-y-16">
+                    <!-- Hero Section -->
+                    <section class="hero-pattern rounded-2xl p-8 md:p-12 text-white">
+                        <div class="max-w-5xl mx-auto text-center">
+                            <h1 class="text-4xl md:text-6xl font-bold mb-6">Buy, Sell & Save the Planet</h1>
+                            <p class="text-xl md:text-2xl opacity-90 mb-8">EcoFind makes sustainable second-hand shopping effortless. Save money, cut waste, and reduce your carbon footprint.</p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="#" onclick="navigateTo('browse')" class="bg-white text-emerald-600 font-medium rounded-xl px-6 py-4 shadow-lg flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+                                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> Shop Now
+                                </a>
+                                <a href="#" onclick="navigateTo('sell')" class="bg-emerald-800 text-white font-medium rounded-xl px-6 py-4 shadow-lg flex items-center justify-center gap-2 hover:bg-emerald-900 transition-colors">
+                                    <i data-lucide="plus" class="w-5 h-5"></i> Sell an Item
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Categories Section -->
+                    <section>
+                        <div class="flex items-center justify-between mb-8">
+                            <h2 class="text-2xl font-bold text-slate-800">Shop by Category</h2>
+                            <a href="#" onclick="navigateTo('categories')" class="text-emerald-600 font-medium flex items-center gap-1">
+                                View all <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            ${CATEGORIES.slice(0, 8).map(category => `
+                                <a href="#" onclick="setState({filters: {...state.filters, category: '${category}'}}); navigateTo('browse')" class="category-card bg-white rounded-2xl p-6 text-center shadow-sm border border-slate-100">
+                                    <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i data-lucide="${getCategoryIcon(category)}" class="w-8 h-8 text-emerald-600"></i>
+                                    </div>
+                                    <h3 class="font-medium text-slate-800">${category}</h3>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </section>
+
+                    <!-- Featured Listings -->
+                    <section>
+                        <div class="flex items-center justify-between mb-8">
+                            <h2 class="text-2xl font-bold text-slate-800">Featured Items</h2>
+                            <a href="#" onclick="navigateTo('browse')" class="text-emerald-600 font-medium flex items-center gap-1">
+                                View all <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            ${featuredListings.slice(0, 4).map(listing => ProductCard(listing)).join('')}
+                        </div>
+                    </section>
+
+                    <!-- Stats Section -->
+                    <section class="bg-white rounded-2xl p-8 shadow-sm">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-emerald-600">5K+</div>
+                                <div class="text-slate-600">Items Saved</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-emerald-600">120+</div>
+                                <div class="text-slate-600">Tons of CO₂ Saved</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-emerald-600">8K+</div>
+                                <div class="text-slate-600">Happy Users</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-emerald-600">15+</div>
+                                <div class="text-slate-600">Cities</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- How it Works -->
+                    <section>
+                        <h2 class="text-2xl font-bold text-slate-800 mb-8 text-center">How EcoFind Works</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-2xl p-6 text-center shadow-sm">
+                                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl font-bold text-blue-600">1</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 mb-2">List or Browse</h3>
+                                <p class="text-slate-600">List your pre-loved items or browse sustainable alternatives to new products.</p>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 text-center shadow-sm">
+                                <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl font-bold text-emerald-600">2</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 mb-2">Connect & Transact</h3>
+                                <p class="text-slate-600">Message sellers, negotiate prices, and arrange pickup or delivery.</p>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 text-center shadow-sm">
+                                <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl font-bold text-amber-600">3</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 mb-2">Track Your Impact</h3>
+                                <p class="text-slate-600">See how much CO₂ and water you've saved with every purchase.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Testimonials -->
+                    <section class="bg-slate-100 rounded-2xl p-8">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-8 text-center">What Our Users Say</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-2xl p-6 shadow-sm">
+                                <div class="flex items-center gap-2 text-amber-500 mb-4">
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                </div>
+                                <p class="text-slate-600 mb-4">"I've saved so much money buying second-hand on EcoFind, and I love knowing I'm reducing my environmental impact!"</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                        <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Rahul M.</div>
+                                        <div class="text-sm text-slate-500">Mumbai</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 shadow-sm">
+                                <div class="flex items-center gap-2 text-amber-500 mb-4">
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4"></i>
+                                </div>
+                                <p class="text-slate-600 mb-4">"The eco-score feature is brilliant! It helps me make informed decisions about my purchases."</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                        <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Priya S.</div>
+                                        <div class="text-sm text-slate-500">Delhi</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 shadow-sm">
+                                <div class="flex items-center gap-2 text-amber-500 mb-4">
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                                </div>
+                                <p class="text-slate-600 mb-4">"I've cleared out my closet and made extra cash while knowing my items are going to good homes. Win-win!"</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                        <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Ananya T.</div>
+                                        <div class="text-sm text-slate-500">Bangalore</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'Clothing': 'shirt',
+                'Electronics': 'smartphone',
+                'Furniture': 'chair',
+                'Books': 'book-open',
+                'Home & Garden': 'home',
+                'Sports': 'dumbbell',
+                'Toys': 'gamepad-2',
+                'Other': 'package'
+            };
+            return icons[category] || 'package';
+        }
+
+        function ProductCard(listing) {
+            const isInWishlist = state.wishlist.includes(listing.id);
+            
+            return `
+                <div class="product-card bg-white rounded-2xl p-4 shadow-sm border border-slate-100 relative">
+                    ${listing.originalPrice ? `
+                        <div class="discount-tag">
+                            ${Math.round((1 - listing.price/listing.originalPrice) * 100)}% off
+                        </div>
+                    ` : ''}
+                    <button onclick="toggleWishlist('${listing.id}')" class="absolute top-3 right-3 p-2 rounded-full bg-white shadow-sm">
+                        <i data-lucide="${isInWishlist ? 'heart' : 'heart'}" class="w-4 h-4 ${isInWishlist ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}"></i>
+                    </button>
+                    <div class="aspect-square bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl flex items-center justify-center text-emerald-700 mb-3">
+                        <i data-lucide="${getCategoryIcon(listing.category)}" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800 mb-1 truncate">${listing.title}</h3>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-slate-500">${listing.category} • ${listing.distanceKm}km away</span>
+                            ${EcoBadge(listing.ecoScore)}
+                        </div>
+                        <div class="flex items-center justify-between mt-3">
+                            <div>
+                                <div class="font-bold text-slate-800">₹${listing.price.toLocaleString()}</div>
+                                ${listing.originalPrice ? `
+                                    <div class="text-xs text-slate-500 line-through">₹${listing.originalPrice.toLocaleString()}</div>
+                                ` : ''}
+                            </div>
+                            <button onclick="addToCart('${listing.id}')" class="bg-emerald-600 text-white p-2 rounded-full">
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function BrowseView() {
+            const filtered = getFilteredListings();
+            
+            return `
+                <div class="space-y-6">
+                    <h1 class="text-2xl font-bold text-slate-800">Browse Sustainable Items</h1>
+                    
+                    <div class="flex flex-wrap items-center gap-3 bg-white border rounded-2xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 flex-1 min-w-[220px]">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-500"></i>
+                            <input value="${state.filters.query}" oninput="updateFilter('query', this.value)" placeholder="Search listings…" class="bg-transparent outline-none w-full">
+                        </div>
+                        <select value="${state.filters.category}" onchange="updateFilter('category', this.value)" class="border rounded-xl px-3 py-2">
+                            <option>All</option>
+                            ${CATEGORIES.map(c => `<option>${c}</option>`).join('')}
+                        </select>
+                        <select value="${state.filters.sortBy}" onchange="updateFilter('sortBy', this.value)" class="border rounded-xl px-3 py-2">
+                            ${['Newest','Price ↑','Price ↓','EcoScore'].map(s => `<option>${s}</option>`).join('')}
+                        </select>
+                        <label class="flex items-center gap-2 text-sm">
+                            <input type="checkbox" ${state.filters.barterOnly ? 'checked' : ''} onchange="updateFilter('barterOnly', this.checked)" />
+                            Barter only
+                        </label>
+                        <div class="flex items-center gap-2 text-sm">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            <span>Within ${state.filters.maxDistance} km</span>
+                            <input type="range" min="1" max="100" value="${state.filters.maxDistance}" oninput="updateFilter('maxDistance', parseInt(this.value))" />
+                        </div>
+                    </div>
+
+                    ${filtered.length === 0 ? EmptyState() : ListingGrid(filtered)}
+                </div>
+            `;
+        }
+
+        function updateFilter(key, value) {
+            const filters = { ...state.filters, [key]: value };
+            setState({ filters });
+        }
+
+        function EmptyState() {
+            return `
+                <div class="text-center py-20 bg-white border rounded-2xl">
+                    <i data-lucide="search" class="w-12 h-12 text-slate-400 mx-auto mb-4"></i>
+                    <p class="text-slate-600">No items match your filters yet.</p>
+                    <p class="text-sm text-slate-500 mt-1">Try widening your distance or searching a different term.</p>
+                </div>
+            `;
+        }
+
+        function ListingGrid(listings) {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    ${listings.map(listing => ProductCard(listing)).join('')}
+                </div>
+            `;
+        }
+
+        function CategoriesView() {
+            return `
+                <div class="space-y-8">
+                    <h1 class="text-2xl font-bold text-slate-800">Shop by Category</h1>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        ${CATEGORIES.map(category => `
+                            <a href="#" onclick="setState({filters: {...state.filters, category: '${category}'}}); navigateTo('browse')" class="category-card bg-white rounded-2xl p-8 text-center shadow-sm border border-slate-100">
+                                <div class="bg-emerald-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="${getCategoryIcon(category)}" class="w-10 h-10 text-emerald-600"></i>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 text-lg">${category}</h3>
+                                <p class="text-sm text-slate-600 mt-2">Explore ${category.toLowerCase()} items</p>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function SellView() {
+            return `
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl p-8 shadow-sm">
+                        <h1 class="text-2xl font-bold text-slate-800 mb-6">Sell an Item</h1>
+                        
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Item Title</label>
+                                    <input type="text" placeholder="e.g., Vintage Denim Jacket" class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Category</label>
+                                    <select class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                        <option value="">Select a category</option>
+                                        ${CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                                <textarea rows="4" placeholder="Describe your item in detail..." class="w-full border border-slate-200 rounded-xl px-4 py-3"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Price (₹)</label>
+                                    <input type="number" placeholder="0" class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Condition</label>
+                                    <select class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                        <option value="">Select condition</option>
+                                        <option>New</option>
+                                        <option>Like New</option>
+                                        <option>Excellent</option>
+                                        <option>Very Good</option>
+                                        <option>Good</option>
+                                        <option>Fair</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Location</label>
+                                    <input type="text" placeholder="Your city" class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Upload Photos</label>
+                                <div class="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center">
+                                    <i data-lucide="upload" class="w-12 h-12 text-slate-400 mx-auto mb-4"></i>
+                                    <p class="text-slate-600">Drag & drop images here or click to browse</p>
+                                    <p class="text-sm text-slate-500 mt-1">Up to 5 images</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="button" class="bg-emerald-600 text-white font-medium rounded-xl px-6 py-3 flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-5 h-5"></i> Publish Listing
+                                </button>
+                                <button type="button" class="border border-slate-200 text-slate-700 font-medium rounded-xl px-6 py-3">
+                                    Save Draft
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function ImpactView() {
+            return `
+                <div class="space-y-8">
+                    <h1 class="text-2xl font-bold text-slate-800">Your Environmental Impact</h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-2xl p-6 shadow-sm text-center">
+                            <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="cloud-rain" class="w-8 h-8 text-emerald-600"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-emerald-600">8,420L</div>
+                            <div class="text-slate-600">Water Saved</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-6 shadow-sm text-center">
+                            <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="cloud" class="w-8 h-8 text-amber-600"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-amber-600">245kg</div>
+                            <div class="text-slate-600">CO₂ Saved</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-6 shadow-sm text-center">
+                            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="shopping-bag" class="w-8 h-8 text-blue-600"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-blue-600">42</div>
+                            <div class="text-slate-600">Items Rescued</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-6 shadow-sm">
+                        <h2 class="text-xl font-semibold text-slate-800 mb-6">Impact Over Time</h2>
+                        <div class="h-64 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
+                            <i data-lucide="bar-chart-3" class="w-12 h-12 mr-3"></i> Impact chart visualization
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-6 shadow-sm">
+                        <h2 class="text-xl font-semibold text-slate-800 mb-6">Your Impact Compared</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="font-medium">Your Impact</div>
+                                    <div class="font-bold text-emerald-600">85%</div>
+                                </div>
+                                <div class="w-full bg-slate-200 rounded-full h-2">
+                                    <div class="bg-emerald-600 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="font-medium">Average User</div>
+                                    <div class="font-bold text-slate-600">62%</div>
+                                </div>
+                                <div class="w-full bg-slate-200 rounded-full h-2">
+                                    <div class="bg-slate-600 h-2 rounded-full" style="width: 62%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function CartView() {
+            const cartItems = state.listings.filter(item => state.cart.includes(item.id));
+            
+            return `
+                <div class="max-w-6xl mx-auto">
+                    <h1 class="text-2xl font-bold text-slate-800 mb-8">Your Cart</h1>
+                    
+                    ${cartItems.length === 0 ? `
+                        <div class="bg-white rounded-2xl p-12 text-center shadow-sm">
+                            <i data-lucide="shopping-cart" class="w-16 h-16 text-slate-300 mx-auto mb-6"></i>
+                            <h2 class="text-xl font-semibold text-slate-700 mb-3">Your cart is empty</h2>
+                            <p class="text-slate-600 mb-6">Looks like you haven't added any items to your cart yet.</p>
+                            <a href="#" onclick="navigateTo('browse')" class="bg-emerald-600 text-white font-medium rounded-xl px-6 py-3 inline-flex items-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Start Shopping
+                            </a>
+                        </div>
+                    ` : `
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="lg:col-span-2 space-y-6">
+                                ${cartItems.map(item => `
+                                    <div class="bg-white rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row gap-6">
+                                        <div class="bg-slate-100 rounded-xl w-full sm:w-32 h-32 flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="${getCategoryIcon(item.category)}" class="w-10 h-10 text-slate-400"></i>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <h3 class="font-semibold text-slate-800">${item.title}</h3>
+                                                <button onclick="removeFromCart('${item.id}')" class="text-slate-400 hover:text-slate-600">
+                                                    <i data-lucide="x" class="w-5 h-5"></i>
+                                                </button>
+                                            </div>
+                                            <p class="text-slate-600 text-sm mb-4">${item.category} • ${item.condition} • ${item.distanceKm}km away</p>
+                                            <div class="flex items-center justify-between">
+                                                <div class="font-bold text-slate-800">₹${item.price.toLocaleString()}</div>
+                                                ${EcoBadge(item.ecoScore)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="bg-white rounded-2xl p-6 shadow-sm h-fit sticky top-24">
+                                <h2 class="text-xl font-semibold text-slate-800 mb-6">Order Summary</h2>
+                                
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Subtotal</span>
+                                        <span class="font-medium">₹${cartItems.reduce((total, item) => total + item.price, 0).toLocaleString()}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Shipping</span>
+                                        <span class="font-medium">₹99</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Tax</span>
+                                        <span class="font-medium">₹${Math.round(cartItems.reduce((total, item) => total + item.price, 0) * 0.18).toLocaleString()}</span>
+                                    </div>
+                                    <div class="border-t border-slate-200 pt-4 flex justify-between">
+                                        <span class="font-semibold text-slate-800">Total</span>
+                                        <span class="font-bold text-emerald-600">₹${(cartItems.reduce((total, item) => total + item.price, 0) + 99 + Math.round(cartItems.reduce((total, item) => total + item.price, 0) * 0.18)).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full bg-emerald-600 text-white font-medium rounded-xl py-3 mb-4">
+                                    Proceed to Checkout
+                                </button>
+                                <button onclick="navigateTo('browse')" class="w-full border border-slate-200 text-slate-700 font-medium rounded-xl py-3">
+                                    Continue Shopping
+                                </button>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function WishlistView() {
+            const wishlistItems = state.listings.filter(item => state.wishlist.includes(item.id));
+            
+            return `
+                <div class="max-w-6xl mx-auto">
+                    <h1 class="text-2xl font-bold text-slate-800 mb-8">Your Wishlist</h1>
+                    
+                    ${wishlistItems.length === 0 ? `
+                        <div class="bg-white rounded-2xl p-12 text-center shadow-sm">
+                            <i data-lucide="heart" class="w-16 h-16 text-slate-300 mx-auto mb-6"></i>
+                            <h2 class="text-xl font-semibold text-slate-700 mb-3">Your wishlist is empty</h2>
+                            <p class="text-slate-600 mb-6">Start saving items you love for later.</p>
+                            <a href="#" onclick="navigateTo('browse')" class="bg-emerald-600 text-white font-medium rounded-xl px-6 py-3 inline-flex items-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Explore Items
+                            </a>
+                        </div>
+                    ` : `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            ${wishlistItems.map(item => ProductCard(item)).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function ProfileView() {
+            if (!state.user) {
+                return `
+                    <div class="bg-white rounded-2xl p-6 text-center">
+                        <p class="text-slate-600">You are not logged in.</p>
+                        <button onclick="navigateTo('login')" class="mt-3 bg-emerald-600 text-white rounded-xl px-4 py-2">Login</button>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl p-8 shadow-sm">
+                        <div class="flex items-center gap-6 mb-8">
+                            <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="w-10 h-10 text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-2xl font-bold text-slate-800">${state.user.name}</h1>
+                                <p class="text-slate-600">EcoFind Member since 2023</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-slate-50 rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-emerald-600">${state.listings.filter(l => l.seller.id === state.user.id).length}</div>
+                                <div class="text-slate-600">Listings</div>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-emerald-600">${state.wishlist.length}</div>
+                                <div class="text-slate-600">Wishlisted</div>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-4 text-center">
+                                <div class="text-2xl font-bold text-emerald-600">${state.cart.length}</div>
+                                <div class="text-slate-600">In Cart</div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="text-xl font-semibold text-slate-800 mb-4">Your Listings</h2>
+                        
+                        ${state.listings.filter(l => l.seller.id === state.user.id).length === 0 ? `
+                            <div class="bg-slate-50 rounded-xl p-8 text-center">
+                                <i data-lucide="package" class="w-12 h-12 text-slate-400 mx-auto mb-4"></i>
+                                <p class="text-slate-600">You haven't listed any items yet.</p>
+                                <button onclick="navigateTo('sell')" class="mt-4 bg-emerald-600 text-white rounded-xl px-4 py-2 inline-flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Create Your First Listing
+                                </button>
+                            </div>
+                        ` : `
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                ${state.listings.filter(l => l.seller.id === state.user.id).map(item => ProductCard(item)).join('')}
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function LoginView() {
+            if (state.user) {
+                return `
+                    <div class="max-w-md mx-auto">
+                        <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
+                            <i data-lucide="user-check" class="w-12 h-12 text-emerald-600 mx-auto mb-4"></i>
+                            <h1 class="text-xl font-semibold text-slate-800 mb-2">Already logged in</h1>
+                            <p class="text-slate-600">You are currently logged in as <span class="font-medium">${state.user.name}</span></p>
+                            <div class="mt-6 flex gap-3 justify-center">
+                                <button onclick="navigateTo('profile')" class="bg-emerald-600 text-white rounded-xl px-4 py-2">Go to Profile</button>
+                                <button onclick="logout()" class="border border-slate-200 text-slate-700 rounded-xl px-4 py-2">Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="max-w-md mx-auto">
+                    <div class="bg-white rounded-2xl p-8 shadow-sm">
+                        <h1 class="text-2xl font-bold text-slate-800 mb-2">Welcome back</h1>
+                        <p class="text-slate-600 mb-6">Sign in to your EcoFind account</p>
+                        
+                        <form>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Email address</label>
+                                    <input type="email" class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                                    <input type="password" class="w-full border border-slate-200 rounded-xl px-4 py-3">
+                                </div>
+                            </div>
+                            
+                            <button type="button" onclick="login('EcoUser')" class="w-full bg-emerald-600 text-white font-medium rounded-xl py-3 mt-6">
+                                Sign in
+                            </button>
+                        </form>
+                        
+                        <div class="text-center mt-6">
+                            <p class="text-slate-600">Don't have an account? <a href="#" class="text-emerald-600 font-medium">Sign up</a></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Main render function
+        function render() {
+            let content;
+            
+            switch (state.currentView) {
+                case 'home':
+                    content = HomeView();
+                    break;
+                case 'browse':
+                    content = BrowseView();
+                    break;
+                case 'categories':
+                    content = CategoriesView();
+                    break;
+                case 'sell':
+                    content = SellView();
+                    break;
+                case 'impact':
+                    content = ImpactView();
+                    break;
+                case 'cart':
+                    content = CartView();
+                    break;
+                case 'wishlist':
+                    content = WishlistView();
+                    break;
+                case 'profile':
+                    content = ProfileView();
+                    break;
+                case 'login':
+                    content = LoginView();
+                    break;
+                default:
+                    content = HomeView();
+            }
+            
+            document.getElementById('app').innerHTML = `
+                ${Header()}
+                <main class="max-w-7xl mx-auto px-4 py-8">
+                    ${content}
+                </main>
+                ${Footer()}
+            `;
+            
+            // Initialize Lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // Initialize the app
+        render();
+    </script>
+</body>
+
+</html>
