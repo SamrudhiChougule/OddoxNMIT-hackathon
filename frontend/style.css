@@ -1,13 +1,51 @@
 /* ================= Body & Font ================= */
 
+
+/* ================= Body & Font with Background Image ================= */
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(-45deg, #0d0d0d, #1a1a1a, #00e676, #004d00);
-    background-size: 400% 400%;
+    min-height: 100vh;
+    color: #111;
+    position: relative;
+    /* Combine animated gradient + subtle eco-friendly image */
+    background: linear-gradient(-45deg, #ffffff 0%, #aafbaf 70%, #f5f5ee 90%);
+    background-size: cover, cover;
     animation: gradientBG 15s ease infinite;
-    color: #90fbf9;
+}
+
+
+/* Animated gradient keyframes */
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/* Nature image overlay */
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/eco-bg.jpg') center/cover no-repeat;
+    opacity: 0.15;
+    /* subtle overlay */
+    pointer-events: none;
+    z-index: -1;
 }
 
 
@@ -17,9 +55,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #111;
+    background: rgba(255, 255, 255, 0.9);
+    /* semi-transparent white */
     padding: 1rem 2rem;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid #ccc;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -28,27 +67,27 @@ header {
 header .logo {
     font-size: 1.6rem;
     font-weight: bold;
-    color: #00e676;
-    /* neon green accent */
+    color: #4caf50;
+    /* green accent */
 }
 
 header nav a {
     margin-left: 1.5rem;
     text-decoration: none;
-    color: #aaa;
+    color: #333;
     font-weight: 500;
     transition: color 0.3s;
 }
 
 header nav a:hover {
-    color: #00e676;
+    color: #4caf50;
 }
 
 #theme-toggle {
     background: none;
-    border: 1px solid #00e676;
+    border: 1px solid #4caf50;
     border-radius: 50%;
-    color: #00e676;
+    color: #4caf50;
     font-size: 1.2rem;
     padding: 0.3rem 0.5rem;
     cursor: pointer;
@@ -56,8 +95,8 @@ header nav a:hover {
 }
 
 #theme-toggle:hover {
-    background: #00e676;
-    color: #000;
+    background: #4caf50;
+    color: #fff;
     transform: scale(1.2);
 }
 
@@ -67,9 +106,9 @@ header nav a:hover {
 .hero {
     text-align: center;
     padding: 5rem 2rem;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/1200/400?blur') center/cover no-repeat;
-    color: #fff;
-    border-bottom: 2px solid #00e676;
+    background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('https://picsum.photos/1200/400?blur') center/cover no-repeat;
+    color: #111;
+    border-bottom: 2px solid #4caf50;
 }
 
 .hero h1 {
@@ -83,18 +122,18 @@ header nav a:hover {
 }
 
 .cta-btn {
-    background: linear-gradient(90deg, #00e676, #00ffa3);
-    color: #000;
+    background: linear-gradient(90deg, #4caf50, #c6ff00);
+    color: #111;
     padding: 0.8rem 2rem;
     font-size: 1.1rem;
     border-radius: 30px;
     cursor: pointer;
-    box-shadow: 0 0 15px #00e67680;
+    box-shadow: 0 0 15px #4caf5080;
     transition: all 0.3s;
 }
 
 .cta-btn:hover {
-    box-shadow: 0 0 25px #00e676;
+    box-shadow: 0 0 25px #4caf50;
     transform: scale(1.05);
 }
 
@@ -107,9 +146,9 @@ header nav a:hover {
 }
 
 .filter-btn {
-    background: #222;
-    color: #00e676;
-    border: 1px solid #00e676;
+    background: #f0f0f0;
+    color: #4caf50;
+    border: 1px solid #4caf50;
     padding: 0.5rem 1rem;
     margin: 0.3rem;
     border-radius: 20px;
@@ -118,8 +157,8 @@ header nav a:hover {
 }
 
 .filter-btn:hover {
-    background: #00e676;
-    color: #000;
+    background: #4caf50;
+    color: #fff;
 }
 
 
@@ -133,12 +172,12 @@ header nav a:hover {
 }
 
 .product-card {
-    background: #1a1a1a;
+    background: #f9f9f9;
     border-radius: 12px;
     padding: 1rem;
     text-align: center;
     position: relative;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
     border: 2px solid transparent;
     opacity: 0;
@@ -148,8 +187,8 @@ header nav a:hover {
 
 .product-card:hover {
     transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
-    border: 2px solid #00e676;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border: 2px solid #4caf50;
 }
 
 .product-card img {
@@ -159,17 +198,17 @@ header nav a:hover {
 }
 
 .product-card h3 {
-    color: #fff;
+    color: #111;
     margin: 0.5rem 0;
 }
 
 .product-card p {
-    color: #bbb;
+    color: #555;
     font-size: 0.9rem;
 }
 
 .product-card b {
-    color: #00e676;
+    color: #4caf50;
     font-size: 1.1rem;
 }
 
@@ -180,9 +219,9 @@ header nav a:hover {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #111;
-    border: 1px solid #00e676;
-    color: #00e676;
+    background: #fff;
+    border: 1px solid #4caf50;
+    color: #4caf50;
     border-radius: 50%;
     padding: 0.5rem;
     cursor: pointer;
@@ -190,8 +229,8 @@ header nav a:hover {
 }
 
 .product-card button:hover {
-    background: #00e676;
-    color: #000;
+    background: #4caf50;
+    color: #fff;
     transform: scale(1.2);
 }
 
@@ -200,7 +239,7 @@ header nav a:hover {
 
 .wishlist {
     padding: 2rem;
-    background: #111;
+    background: #f0f0f0;
 }
 
 
@@ -208,8 +247,8 @@ header nav a:hover {
 
 .eco-badge {
     display: inline-block;
-    background: #00c853;
-    color: black;
+    background: #4caf50;
+    color: #fff;
     font-size: 0.75rem;
     padding: 0.2rem 0.5rem;
     border-radius: 12px;
@@ -232,16 +271,16 @@ header nav a:hover {
 footer {
     text-align: center;
     padding: 1.5rem;
-    background: #111;
-    color: #777;
-    border-top: 1px solid #222;
+    background: rgba(255, 255, 255, 0.9);
+    color: #555;
+    border-top: 1px solid #ccc;
 }
 
 
 /* ================= Light Mode ================= */
 
 body.light-mode {
-    background: #f9f9f9;
+    background: #ffffff;
     color: #111;
 }
 
@@ -269,4 +308,9 @@ body.light-mode .product-card {
     100% {
         background-position: 0% 50%;
     }
+}
+
+.full-gradient {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffffff 0%, #4caf50 70%, #ffff99 90%);
 }
