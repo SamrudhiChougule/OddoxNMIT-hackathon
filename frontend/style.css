@@ -11,7 +11,7 @@ body {
     color: #111;
     position: relative;
     /* Combine animated gradient + subtle eco-friendly image */
-    background: linear-gradient(-45deg, #ffffff 0%, #aafbaf 70%, #f5f5ee 90%);
+    background: linear-gradient(-45deg, #ffffff 0%, #81ff73 70%, #abf5f1 90%);
     background-size: cover, cover;
     animation: gradientBG 15s ease infinite;
 }
@@ -41,8 +41,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('images/eco-bg.jpg') center/cover no-repeat;
-    opacity: 0.15;
+    background: url('background.jpg') center/cover no-repeat;
+    opacity: 0.45;
     /* subtle overlay */
     pointer-events: none;
     z-index: -1;
@@ -108,7 +108,7 @@ header nav a:hover {
     padding: 5rem 2rem;
     background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('https://picsum.photos/1200/400?blur') center/cover no-repeat;
     color: #111;
-    border-bottom: 2px solid #4caf50;
+    border-bottom: 2px solid #70cb78;
 }
 
 .hero h1 {
